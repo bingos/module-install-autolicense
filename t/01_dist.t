@@ -12,7 +12,7 @@ unless ( -e 'have_make' ) {
   plan skip_all => 'No network tests';
 }
 
-plan tests => 3;
+plan tests => 4;
 
 my $make = $Config{make};
 
@@ -44,6 +44,14 @@ my @tests = (
 );
 ok( -e $_, "Exists: '$_'" ) for @tests;
 ok( -e 'LICENSE', 'There is a LICENSE file' );
+
+{ 
+  open my $license, '<', 'LICENSE' or die "$!\n";
+  local $/;
+  my $contents = <$license>;
+  close $license;
+  like( $contents, qr/Foo Bar/s, 'Foo Bar is contained in the license file' );
+}
 
 my $distclean = capture_merged { system "$make distclean" };
 diag("$distclean");

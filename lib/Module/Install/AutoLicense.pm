@@ -27,7 +27,8 @@ sub auto_license {
   return unless $Module::Install::AUTHOR;
   my %opts = @_;
   $opts{lc $_} = delete $opts{$_} for keys %opts;
-  my $holder = $opts{holder} || $self->author();
+  my $holder = $opts{holder} || _get_authors( $self );
+  #my $holder = $opts{holder} || $self->author;
   my $license = $self->license();
   unless ( defined $licenses{ $license } ) {
      warn "No license definition for '$license', aborting\n";
@@ -47,6 +48,12 @@ license_clean:
 END
 
   return 1;
+}
+
+sub _get_authors {
+  my $self = shift;
+  my $joined = join ', ', @{ $self->author() || [] };
+  return $joined;
 }
 
 'Licensed to auto';

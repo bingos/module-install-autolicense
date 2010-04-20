@@ -12,7 +12,7 @@ unless ( -e 'have_make' ) {
   plan skip_all => 'No network tests';
 }
 
-plan tests => 6;
+plan tests => 4;
 
 my $make = $Config{make};
 
@@ -25,6 +25,7 @@ use inc::Module::Install;
 name 'Foo-Bar';
 version '0.01';
 author 'Foo Bar';
+author 'Moo Cow';
 abstract 'This module does something';
 license 'perl';
 auto_license;
@@ -45,14 +46,20 @@ my @tests = (
 ok( -e $_, "Exists: '$_'" ) for @tests;
 ok( -e 'LICENSE', 'There is a LICENSE file' );
 
-{
+{ 
   open my $license, '<', 'LICENSE' or die "$!\n";
   local $/;
   my $contents = <$license>;
   close $license;
-  like( $contents, qr/Foo Bar/s, 'Foo Bar is contained in the license file' );
+  like( $contents, qr/Foo Bar\, Moo Cow/s, 'Foo Bar and Moo Cow are contained in the license file' );
 }
 
+my $distclean = capture_merged { system "$make distclean" };
+diag("$distclean");
+
+ok( !-e 'LICENSE', 'The LICENSE file has been removed' );
+
+exit 0;
 # Need to make a manifest
 
 my $manifest = capture_merged { system "$make manifest" };
@@ -60,19 +67,3 @@ diag("$manifest");
 
 my $distdir = capture_merged { system "$make distdir" };
 diag("$distdir");
-
-chdir 'Foo-Bar-0.01' or die "$!\n!";
-ok( -e 'LICENSE', 'There is a LICENSE file' );
-my $foobar = capture_merged { system "$^X Makefile.PL" };
-diag("$foobar");
-my $distclean = capture_merged { system "$make distclean" };
-diag("$distclean");
-ok( -e 'LICENSE', 'There is a LICENSE file' );
-
-{
-  open my $license, '<', 'LICENSE' or die "$!\n";
-  local $/;
-  my $contents = <$license>;
-  close $license;
-  like( $contents, qr/Foo Bar/s, 'Foo Bar is contained in the license file' );
-}

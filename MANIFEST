@@ -4,6 +4,7 @@ inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
+inc/Module/Install/GithubMeta.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
@@ -17,5 +18,6 @@ README
 t/00_compile.t
 t/01_dist.t
 t/02_distdir.t
+t/03_authors.t
 t/99_pod.t
 t/99_pod_coverage.t
