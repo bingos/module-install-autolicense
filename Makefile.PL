@@ -8,6 +8,7 @@ abstract_from 'lib/Module/Install/AutoLicense.pm';
 license 'perl';
 perl_version '5.006';
 build_requires 'Test::More' => 0.47;
+build_requires 'File::Temp' => 0;
 build_requires 'Capture::Tiny' => 0.05;
 requires 'Module::Install' => 0.85;
 requires 'Software::License' => 0.010;

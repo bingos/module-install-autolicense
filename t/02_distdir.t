@@ -1,12 +1,10 @@
 use strict;
 use warnings;
 use Test::More; #tests => 1;
+use File::Temp      qw[tempdir];
 use File::Path      qw[rmtree];
 use Capture::Tiny   qw[capture_merged];
 use Config;
-
-# Cleanup 
-eval { rmtree('dist') };
 
 unless ( -e 'have_make' ) {
   plan skip_all => 'No network tests';
@@ -14,10 +12,11 @@ unless ( -e 'have_make' ) {
 
 plan tests => 6;
 
+{
 my $make = $Config{make};
-
-mkdir 'dist' or die "$!\n";
-chdir 'dist' or die "$!\n";
+mkdir 'dist';
+my $tmpdir = tempdir( DIR => 'dist', CLEANUP => 1 );
+chdir $tmpdir or die "$!\n";
 open MFPL, '>Makefile.PL' or die "$!\n";
 print MFPL <<EOF;
 use strict;
@@ -75,4 +74,6 @@ ok( -e 'LICENSE', 'There is a LICENSE file' );
   my $contents = <$license>;
   close $license;
   like( $contents, qr/Foo Bar/s, 'Foo Bar is contained in the license file' );
+}
+
 }

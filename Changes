@@ -1,6 +1,10 @@
 Changelog for Module-Install-AutoLicense
 ========================================
 
+0.06  Thu Apr 29 12:43:47 BST 2010
+  - tests should be capable of parallel execution now
+    reported by Florian Ragwitz RT #56981
+
 0.04  Tue Apr 20 10:52:56 BST 2010
   - $self->author is an array, so we
     need to join the elements to make a string.
