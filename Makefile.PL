@@ -1,3 +1,4 @@
+use if ! ( grep { $_ eq '.' } @INC ), qw[lib .];
 use strict;
 use inc::Module::Install;
 use Config;
@@ -20,5 +21,6 @@ if ( $Config{make} and can_run( $Config{make} ) ) {
   close HAVEMAKE;
 }
 auto_provides;
+auto_license;
 githubmeta;
 WriteAll();

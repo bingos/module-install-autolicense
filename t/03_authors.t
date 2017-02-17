@@ -18,7 +18,8 @@ mkdir 'dist';
 my $tmpdir = tempdir( DIR => 'dist', CLEANUP => 1 );
 chdir $tmpdir or die "$!\n";
 open MFPL, '>Makefile.PL' or die "$!\n";
-print MFPL <<EOF;
+print MFPL <<'EOF';
+use if ! ( grep { $_ eq '.' } @INC ), qw[lib .];
 use strict;
 use inc::Module::Install;
 name 'Foo-Bar';
@@ -45,7 +46,7 @@ my @tests = (
 ok( -e $_, "Exists: '$_'" ) for @tests;
 ok( -e 'LICENSE', 'There is a LICENSE file' );
 
-{ 
+{
   open my $license, '<', 'LICENSE' or die "$!\n";
   local $/;
   my $contents = <$license>;
